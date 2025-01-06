@@ -20,6 +20,7 @@ model User {
   name     String?
   password String
   posts    Post[]
+
 }
 
 model Post {
@@ -30,3 +31,4 @@ model Post {
   author    User     @relation(fields: [authorId], references: [id])
   authorId  String
 }
+
