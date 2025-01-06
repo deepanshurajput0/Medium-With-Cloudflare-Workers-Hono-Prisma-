@@ -1,16 +1,37 @@
 import { Hono } from 'hono'
 import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
-import { sign } from 'hono/jwt'
+import { sign, verify, JwtVariables } from 'hono/jwt'
 type Bindings = {
   DATABASE_URL: string
   JWT_SECRET:string
 }
+type Variables ={
+   userId:string
+}
 
 export const blogRouter = new Hono<{
-    Bindings:Bindings
+    Bindings:Bindings,
+    Variables:Variables
 }>()
 
+blogRouter.use('/*', async(c,next)=>{
+  try {
+    const authHeader = c.req.header("Authorization") || "";
+    const user = await  verify(authHeader,c.env.JWT_SECRET)
+    if(user){
+        //@ts-ignore
+      c.set("userId", user.id); 
+       await  next()
+    }else{
+         c.status(403)
+         return c.json({error:"Unauthorised User"})
+    }
+  } catch (error) {
+     return c.json({error:'Invalid Token'})
+  }
+
+})
 
 blogRouter.post('/create',async(c)=>{
     const prisma = new PrismaClient({
@@ -19,6 +40,7 @@ blogRouter.post('/create',async(c)=>{
 
     try {
      const { title, content } = await c.req.json()
+     const authorId = c.get('userId')
      if(!title || !content){
         c.status(401)
         return c.json({error:"All fields are required"})
@@ -27,7 +49,7 @@ blogRouter.post('/create',async(c)=>{
         data:{
             title,
             content,
-            authorId:4,
+            authorId:Number(authorId),
             published:true
         }
      })  
@@ -68,6 +90,7 @@ blogRouter.get('/get/:id',async(c)=>{
 
 
 blogRouter.put('/update',async(c)=>{
+    const authorId = c.get('userId')
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate())
@@ -79,7 +102,7 @@ blogRouter.put('/update',async(c)=>{
               content
             },
             where:{
-                id:2
+                id:Number(authorId)
             }
         })
 
@@ -94,13 +117,14 @@ blogRouter.put('/update',async(c)=>{
 
 
 blogRouter.delete('/delete',async(c)=>{
+    const authorId = c.get('userId')
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate())
     try {
         await prisma.post.delete({
             where:{
-                id:2
+                id:Number(authorId)
             }
         })
         c.status(200)
