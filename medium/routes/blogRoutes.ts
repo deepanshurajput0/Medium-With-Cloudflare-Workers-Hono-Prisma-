@@ -65,3 +65,47 @@ blogRouter.get('/get/:id',async(c)=>{
         return c.json({error:'Internal Server Error'})
     }
 })
+
+
+blogRouter.put('/update',async(c)=>{
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate())
+    try {
+        const { title, content } = await c.req.json()
+        await prisma.post.update({
+            data:{
+              title,
+              content
+            },
+            where:{
+                id:2
+            }
+        })
+
+         c.status(200)
+         return c.json({message:'Blog Updated Successfully'})
+
+    } catch (error) {
+        c.status(500)
+        return c.json({error:'Internal Server Error'})
+    }
+})
+
+
+blogRouter.delete('/delete',async(c)=>{
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate())
+    try {
+        await prisma.post.delete({
+            where:{
+                id:2
+            }
+        })
+        c.status(200)
+        return c.json({message:"Blog deleted successfully"})
+    } catch (error) {
+        return c.json({error:'Internal Server Error'})
+    }
+})
