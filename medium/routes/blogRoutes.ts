@@ -109,3 +109,18 @@ blogRouter.delete('/delete',async(c)=>{
         return c.json({error:'Internal Server Error'})
     }
 })
+
+
+blogRouter.get('/blogs',async(c)=>{
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate())
+    try {
+        const allBlogs = await prisma.post.findMany({})
+        c.status(200)
+        return c.json(allBlogs)
+    } catch (error) {
+        c.status(500)
+        return c.json({error:'Internal Server Error'})
+    }
+})
