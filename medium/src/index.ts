@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
 import bcrypt from 'bcryptjs'
 import { userRouter } from '../routes/userRoutes'
+import { blogRouter } from '../routes/blogRoutes'
 type Bindings = {
   DATABASE_URL: string
   JWT_SECRET:string
@@ -13,6 +14,7 @@ const app = new Hono<{
 }>()
 
 app.route('/api/v1/user',userRouter)
+app.route('/api/v1/blog',blogRouter)
 
 
 
