@@ -20,14 +20,16 @@ const Auth = () => {
           {
             location.pathname === '/signup' ? "Already have an account ?" : "Don't have an account" 
           } {
-            location.pathname === '/signup' ? <Link className=" decoration" to={'/signin'} >Login</Link> : <Link className=" decoration" to={'/signup'} >SignUp</Link>
+            location.pathname === '/signup' ? <Link className=" decoration" to={'/signin'} >Login</Link> : <Link className=" decoration" to={'/signup'} >Signup</Link>
           }
         </p>
       </div>
 
       <div>
         <form action="">
-          <SignUpInput
+           {
+            location.pathname === '/signup' ? 
+            <SignUpInput
             placeholder={"Enter Your name"}
             label={"Username"}
             type={"text"}
@@ -37,7 +39,8 @@ const Auth = () => {
                     name:e.target.value
                 })
             }}
-          />
+          /> : ''
+           }
           <SignUpInput
             placeholder={"Enter Your email"}
             label={"Email"}
@@ -62,7 +65,9 @@ const Auth = () => {
           />
           <button type="button" className="text-white w-full mt-7 bg-[#050708] hover:bg-[#050708]/90 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-5 py-2.5  dark:focus:ring-[#050708]/50 dark:hover:bg-[#050708]/30 me-2 mb-2">
 
-Sign Up
+    {
+        location.pathname === '/signup' ? 'Sign Up' : 'Login '
+    }
 </button>
         </form>
       </div>
@@ -94,7 +99,7 @@ const SignUpInput = ({ label, placeholder, onChange, type }: InputType) => {
       />
  {
         type === 'password' && (
-            <div className="" onClick={()=>setShow(!show)} >
+            <div onClick={()=>setShow(!show)} >
                  {
                     show ? <PiEye/> : <PiEyeClosed/>
                  }
