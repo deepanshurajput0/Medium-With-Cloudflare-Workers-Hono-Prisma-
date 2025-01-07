@@ -1,5 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import { SinginInput } from "medium-commontypes";
+import { PiEyeClosed, PiEye} from "react-icons/pi";
 const Auth = () => {
   const [userData, setUserData] = useState<SinginInput>({
     name: "",
@@ -9,9 +10,6 @@ const Auth = () => {
 
   return (
     <div className="w-full flex justify-center items-center flex-col">
-        {
-            JSON.stringify(userData)
-        }
       <div className=" text-center">
         <h1 className=" text-3xl font-bold"> Create an account</h1>
         <p className=" mt-1 text-slate-600 text-[16px]">
@@ -68,21 +66,35 @@ interface InputType {
   label: string;
   placeholder: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  type: string;
+  type: string 
 }
 
 const SignUpInput = ({ label, placeholder, onChange, type }: InputType) => {
+   const [show,setShow] = useState<boolean>(false)
+   const inputType = type === 'password' && show ? 'text' : type
   return (
     <div className="w-[21rem] mt-5">
       <label className="block mb-2 text-sm font-semibold">{label}</label>
       <input
-        type={type}
+        type={inputType}
         onChange={onChange}
         id="first_name"
         className="bg-gray-50 border border-black-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
         placeholder={placeholder}
         required
+        
       />
+ {
+        type === 'password' && (
+            <div onClick={()=>setShow(!show)} >
+                 {
+                    show ? <PiEye/> : <PiEyeClosed/>
+                 }
+            </div>
+        )
+      }
+     
+   
     </div>
   );
 };
