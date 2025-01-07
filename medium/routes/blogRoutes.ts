@@ -1,7 +1,8 @@
 import { Hono } from 'hono'
 import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
-import { sign, verify, JwtVariables } from 'hono/jwt'
+import { verify } from 'hono/jwt'
+import { createBlogInput, updateBlogInput } from './types'
 type Bindings = {
   DATABASE_URL: string
   JWT_SECRET:string
@@ -39,16 +40,24 @@ blogRouter.post('/create',async(c)=>{
     }).$extends(withAccelerate())
 
     try {
-     const { title, content } = await c.req.json()
+     const body = await c.req.json()
+     const Validation =  createBlogInput.safeParse(body)
+     if(!Validation.success){
+        c.status(400)
+        let errormsg = null
+        Validation.error.errors.map((item)=>(
+              errormsg = item.message
+        ))
+        return c.json({
+            error:'Invalid Input',
+            message:errormsg
+        })
+     }
      const authorId = c.get('userId')
-     if(!title || !content){
-        c.status(401)
-        return c.json({error:"All fields are required"})
-     } 
      await prisma.post.create({
         data:{
-            title,
-            content,
+            title:body.title,
+            content:body.content,
             authorId:Number(authorId),
             published:true
         }
@@ -91,15 +100,29 @@ blogRouter.get('/get/:id',async(c)=>{
 
 blogRouter.put('/update',async(c)=>{
     const authorId = c.get('userId')
+
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate())
     try {
-        const { title, content } = await c.req.json()
+        const body = await c.req.json()
+        const Validation =  updateBlogInput.safeParse(body)
+        if(!Validation.success){
+           c.status(400)
+           let errormsg = null
+           Validation.error.errors.map((item)=>(
+                 errormsg = item.message
+           ))
+           return c.json({
+               error:'Invalid Input',
+               message:errormsg
+           })
+        }
         await prisma.post.update({
             data:{
-              title,
-              content
+              title:body.title,
+              content:body.content,
+
             },
             where:{
                 id:Number(authorId)
