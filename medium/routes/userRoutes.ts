@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
 import { sign } from 'hono/jwt'
 import bcrypt from 'bcryptjs'
-import { signinInput, signupInput } from './types'
+import { signinInput, signupInput } from 'medium-commontypes'
 type Bindings = {
   DATABASE_URL: string
   JWT_SECRET:string
