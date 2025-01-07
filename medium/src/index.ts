@@ -1,7 +1,4 @@
 import { Hono } from 'hono'
-import { PrismaClient } from '@prisma/client/edge'
-import { withAccelerate } from '@prisma/extension-accelerate'
-import bcrypt from 'bcryptjs'
 import { userRouter } from '../routes/userRoutes'
 import { blogRouter } from '../routes/blogRoutes'
 type Bindings = {
