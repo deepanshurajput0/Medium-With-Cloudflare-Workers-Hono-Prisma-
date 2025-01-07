@@ -1,19 +1,27 @@
 import { ChangeEvent, useState } from "react";
 import { SinginInput } from "medium-commontypes";
 import { PiEyeClosed, PiEye} from "react-icons/pi";
+import { Link, useLocation } from "react-router-dom";
 const Auth = () => {
   const [userData, setUserData] = useState<SinginInput>({
     name: "",
     email: "",
     password: "",
   });
-
+  const location = useLocation()
+ 
   return (
     <div className="w-full flex justify-center items-center flex-col">
       <div className=" text-center">
-        <h1 className=" text-3xl font-bold"> Create an account</h1>
+        <h1 className=" text-3xl font-bold"> 
+        {location.pathname === '/signup' ? "Create an account" : "Login Now" }
+        </h1>
         <p className=" mt-1 text-slate-600 text-[16px]">
-          Already have an account ? Login
+          {
+            location.pathname === '/signup' ? "Already have an account ?" : "Don't have an account" 
+          } {
+            location.pathname === '/signup' ? <Link className=" decoration" to={'/signin'} >Login</Link> : <Link className=" decoration" to={'/signup'} >SignUp</Link>
+          }
         </p>
       </div>
 
@@ -86,7 +94,7 @@ const SignUpInput = ({ label, placeholder, onChange, type }: InputType) => {
       />
  {
         type === 'password' && (
-            <div onClick={()=>setShow(!show)} >
+            <div className="" onClick={()=>setShow(!show)} >
                  {
                     show ? <PiEye/> : <PiEyeClosed/>
                  }

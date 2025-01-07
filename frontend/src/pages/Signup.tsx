@@ -3,9 +3,11 @@ import Quote from "../components/Quote"
 
 const Signup = () => {
   return (
-    <div className=" flex justify-evenly">
+    <div className=" flex">
        <Auth/>
-     <Quote/>
+      <div className=" invisible w-0 lg:visible lg:w-full">
+      <Quote/>
+      </div>
     </div>
   )
 }
