@@ -98,13 +98,19 @@ blogRouter.get('/get/:id',async(c)=>{
 })
 
 
-blogRouter.put('/update',async(c)=>{
+blogRouter.put('/update/:id',async(c)=>{
+    
     const authorId = c.get('userId')
-
+    if(!authorId){
+        return c.json({
+            error:'Unauthorized User'
+        })
+    }
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate())
     try {
+        const blogId = c.req.param('id')
         const body = await c.req.json()
         const Validation =  updateBlogInput.safeParse(body)
         if(!Validation.success){
@@ -125,7 +131,8 @@ blogRouter.put('/update',async(c)=>{
 
             },
             where:{
-                id:Number(authorId)
+                id:Number(blogId),
+                authorId:Number(authorId)
             }
         })
 
@@ -139,15 +146,28 @@ blogRouter.put('/update',async(c)=>{
 })
 
 
-blogRouter.delete('/delete',async(c)=>{
-    const authorId = c.get('userId')
+blogRouter.delete('/delete/:id',async(c)=>{
+   
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate())
     try {
+        const authorId = c.get('userId')
+        const blogId = c.req.param('id')
+        if(!authorId){
+            return c.json({
+                error:'Unauthorised User'
+            })
+        }
+        if(!blogId){
+            return c.json({
+                error:'Invalid Blog Id'
+            })
+        }
         await prisma.post.delete({
             where:{
-                id:Number(authorId)
+                id:Number(blogId),
+                authorId:Number(blogId)
             }
         })
         c.status(200)

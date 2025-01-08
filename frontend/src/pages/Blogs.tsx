@@ -1,7 +1,9 @@
 import BlogCard from "../components/BlogCard"
 import Navbar from "../components/Navbar"
-
+import useBlogs from "../hooks/useBlogs"
 const Blogs = () => {
+    const { loading, blogs } = useBlogs()
+    console.log(blogs)
   return (
    <div>
     <Navbar/>
