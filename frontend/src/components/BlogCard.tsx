@@ -8,7 +8,7 @@ interface Blogtype {
 
 const BlogCard = ({author,publishedDate,title,content}:Blogtype) => {
   return (
-    <div className=" w-96 lg:w-[35rem] border-b-2 pb-4">
+    <div className=" w-96 lg:w-[35rem] border-b-2 pb-4 cursor-pointer">
         <div className=" flex items-center space-x-1">
         <div >
             <Avatar name={author} />

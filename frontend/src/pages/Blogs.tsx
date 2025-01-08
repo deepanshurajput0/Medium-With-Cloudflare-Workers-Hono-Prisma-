@@ -1,8 +1,11 @@
 import BlogCard from "../components/BlogCard"
+import Navbar from "../components/Navbar"
 
 const Blogs = () => {
   return (
-    <div className=" flex flex-col items-center space-y-5 justify-center mt-10 ">
+   <div>
+    <Navbar/>
+     <div className=" flex flex-col items-center space-y-5 justify-center mt-10 ">
         <BlogCard 
         author={'Aryan Singh'} 
         publishedDate={'7 Jan 2025'} 
@@ -24,6 +27,7 @@ const Blogs = () => {
 
     
     </div>
+   </div>
   )
 }
 
