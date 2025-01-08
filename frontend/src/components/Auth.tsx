@@ -15,10 +15,16 @@ const Auth = () => {
   const location = useLocation()
   const navigate = useNavigate()
   const handleSignUp =async(e:React.FormEvent<HTMLFormElement>)=>{
+    const userRoutes = location.pathname === '/signup' ? `signup` : `login`
+    const signInUserData = {
+        email:userData.email,
+        password:userData.password
+    }
+    const allUserData = location.pathname === '/signup' ? userData :  signInUserData
     e.preventDefault()
       try {
         setLoading(true)
-        const response  = await axios.post(`${BASE_URL}/api/v1/user/signup`,userData)
+        const response  = await axios.post(`${BASE_URL}/api/v1/user/${userRoutes}`,allUserData)
         setLoading(false)
         localStorage.setItem('token',response.data.token)
         if(response.data){
@@ -41,7 +47,7 @@ const Auth = () => {
         <h1 className=" text-3xl font-bold"> 
         {location.pathname === '/signup' ? "Create an account" : "Login Now" }
         </h1>
-        <p className=" mt-1 text-slate-600 text-[16px]">
+        <p className=" mt-1  text-slate-600 text-[16px]">
           {
             location.pathname === '/signup' ? "Already have an account ?" : "Don't have an account" 
           } {
@@ -125,7 +131,7 @@ const SignUpInput = ({ label, placeholder, onChange, type }: InputType) => {
         type={inputType}
         onChange={onChange}
         id="first_name"
-        className="bg-gray-50 border border-black-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+        className= "bg-gray-50 font-normal border border-black-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
         placeholder={placeholder}
         
       />

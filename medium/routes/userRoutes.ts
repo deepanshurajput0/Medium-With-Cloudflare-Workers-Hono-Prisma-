@@ -96,12 +96,11 @@ userRouter.post('/login',async(c)=>{
      let isCorrectPassword = await bcrypt.compare(body.password,user.password)
      if(!isCorrectPassword){
         c.status(402)
-        return c.json({error:'Inavlid User and password'})
+        return c.json({error:'Invalid User and password'})
      }
      const token = await sign({id:user.id},c.env.JWT_SECRET)
      return c.json({
         message:'User logged in successfully',
-        user,
         token
      })
     } catch (error) {
