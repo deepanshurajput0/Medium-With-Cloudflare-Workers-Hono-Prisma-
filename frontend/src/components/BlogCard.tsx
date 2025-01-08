@@ -1,13 +1,16 @@
+import { Link } from "react-router-dom"
 
-interface Blogtype {
+export interface Blogtype {
     author:string,
     publishedDate:string,
     title:string,
-    content:string
+    content:string,
+    id?:number
 }
 
-const BlogCard = ({author,publishedDate,title,content}:Blogtype) => {
+const BlogCard = ({author,publishedDate,title,content,id}:Blogtype) => {
   return (
+   <Link to={`/blog/${id}`} >
     <div className=" w-96 lg:w-[35rem] border-b-2 pb-4 cursor-pointer">
         <div className=" flex items-center space-x-1">
         <div >
@@ -27,6 +30,7 @@ const BlogCard = ({author,publishedDate,title,content}:Blogtype) => {
             {content.substring(0,150)}...
         </div>
     </div>
+   </Link>
   )
 }
 

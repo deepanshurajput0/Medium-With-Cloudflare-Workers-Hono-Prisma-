@@ -34,6 +34,7 @@ const Blogs = () => {
 
                 return(
                     <BlogCard 
+                    id={item.id}
                     author={item.author.name} 
                     publishedDate={moment(formatedDate).format('DD/MM/YYYY')} 
                     title={item?.title} 
