@@ -1,15 +1,40 @@
-import { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { SinginInput } from "medium-commontypes";
 import { PiEyeClosed, PiEye} from "react-icons/pi";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import axios from 'axios'
+import { BASE_URL } from "../config";
 const Auth = () => {
   const [userData, setUserData] = useState<SinginInput>({
     name: "",
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState<boolean>(false)
   const location = useLocation()
- 
+  const navigate = useNavigate()
+  const handleSignUp =async(e:React.FormEvent<HTMLFormElement>)=>{
+    e.preventDefault()
+      try {
+        setLoading(true)
+        const response  = await axios.post(`${BASE_URL}/api/v1/user/signup`,userData)
+        setLoading(false)
+        localStorage.setItem('token',response.data.token)
+        if(response.data){
+            toast.success(response.data.message)
+        }
+        navigate('/blog')
+        
+      } catch (error) {
+        setLoading(false)
+        if(axios.isAxiosError(error) && error.response){
+            toast.error(error.response.data.error)
+        }
+        
+        
+      }
+  }
   return (
     <div className="w-full flex justify-center items-center flex-col">
       <div className=" text-center">
@@ -26,7 +51,7 @@ const Auth = () => {
       </div>
 
       <div>
-        <form action="">
+        <form onSubmit={handleSignUp} >
            {
             location.pathname === '/signup' ? 
             <SignUpInput
@@ -63,10 +88,18 @@ const Auth = () => {
                 })
             }}
           />
-          <button type="button" className="text-white w-full mt-7 bg-[#050708] hover:bg-[#050708]/90 focus:ring-4 focus:outline-none focus:ring-[#050708]/50 font-medium rounded-lg text-sm px-5 py-2.5  dark:focus:ring-[#050708]/50 dark:hover:bg-[#050708]/30 me-2 mb-2">
+          <button type="submit" className="text-white  font-semibold w-full mt-7 bg-[#050708] hover:bg-[#050708]/90 focus:ring-4 focus:outline-none focus:ring-[#050708]/50  rounded-lg text-sm px-5 py-2.5  dark:focus:ring-[#050708]/50 dark:hover:bg-[#050708]/30 me-2 mb-2">
 
     {
-        location.pathname === '/signup' ? 'Sign Up' : 'Login '
+        location.pathname === '/signup' ? <>
+          {
+            loading ? 'Processing' : 'Sign Up'
+          }
+        </> : <>
+        {
+            loading ? 'Processing' : 'Login '
+        }
+        </>
     }
 </button>
         </form>
@@ -94,7 +127,6 @@ const SignUpInput = ({ label, placeholder, onChange, type }: InputType) => {
         id="first_name"
         className="bg-gray-50 border border-black-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
         placeholder={placeholder}
-        required
         
       />
  {

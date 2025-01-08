@@ -2,6 +2,7 @@ import './App.css'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import Signup from './pages/Signup'
 import Signin from './pages/Signin'
+import  { Toaster } from 'react-hot-toast';
 import Blog from './pages/Blog'
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
       <Route path='/blog' element={<Blog/>}  />
     </Routes>
    </Router>
+   <Toaster />
    </>
   )
 }
