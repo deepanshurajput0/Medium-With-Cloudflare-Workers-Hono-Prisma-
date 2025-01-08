@@ -167,12 +167,13 @@ blogRouter.delete('/delete/:id',async(c)=>{
         await prisma.post.delete({
             where:{
                 id:Number(blogId),
-                authorId:Number(blogId)
+                authorId:Number(authorId)
             }
         })
         c.status(200)
         return c.json({message:"Blog deleted successfully"})
     } catch (error) {
+        console.log(error)
         return c.json({error:'Internal Server Error'})
     }
 })
@@ -183,7 +184,15 @@ blogRouter.get('/blogs',async(c)=>{
         datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate())
     try {
-        const allBlogs = await prisma.post.findMany({})
+        const allBlogs = await prisma.post.findMany({
+            include:{
+                author:{
+                    select:{
+                        name:true
+                    }
+                }
+            }
+        })
         c.status(200)
         return c.json(allBlogs)
     } catch (error) {

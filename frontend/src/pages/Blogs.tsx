@@ -1,31 +1,34 @@
 import BlogCard from "../components/BlogCard"
 import Navbar from "../components/Navbar"
 import useBlogs from "../hooks/useBlogs"
+import moment from 'moment'
 const Blogs = () => {
     const { loading, blogs } = useBlogs()
-    console.log(blogs)
+    if(loading){
+        return(
+            <div>
+                Loading....
+            </div>
+        )
+    }
   return (
    <div>
     <Navbar/>
      <div className=" flex flex-col items-center space-y-5 justify-center mt-10 ">
-        <BlogCard 
-        author={'Aryan Singh'} 
-        publishedDate={'7 Jan 2025'} 
-        title={'The customer service I received was exceptional The support team went above'} 
-        content={'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum reprehenderit accusamus sunt aliquid officia suscipit blanditiis dolorum numquam porro reiciendis rem velit dolores corrupti iusto vel eveniet laudantium, quo saepe rerum nesciunt iure necessitatibus! Aliquid officiis illum vel porro. Eveniet nisi porro, excepturi in explicabo eius nobis quas omnis cumque.'}
-        />
-        <BlogCard 
-        author={'Aryan Singh'} 
-        publishedDate={'7 Jan 2025'} 
-        title={'The customer service I received was exceptional The support team went above'} 
-        content={'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum reprehenderit accusamus sunt aliquid officia suscipit blanditiis dolorum numquam porro reiciendis rem velit dolores corrupti iusto vel eveniet laudantium, quo saepe rerum nesciunt iure necessitatibus! Aliquid officiis illum vel porro. Eveniet nisi porro, excepturi in explicabo eius nobis quas omnis cumque.'}
-        />
-        <BlogCard 
-        author={'Aryan Singh'} 
-        publishedDate={'7 Jan 2025'} 
-        title={'The customer service I received was exceptional The support team went above'} 
-        content={'Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum reprehenderit accusamus sunt aliquid officia suscipit blanditiis dolorum numquam porro reiciendis rem velit dolores corrupti iusto vel eveniet laudantium, quo saepe rerum nesciunt iure necessitatibus! Aliquid officiis illum vel porro. Eveniet nisi porro, excepturi in explicabo eius nobis quas omnis cumque.'}
-        />
+         {
+            blogs.map((item)=>{
+                const formatedDate = item?.createdAt
+
+                return(
+                    <BlogCard 
+                    author={item.author.name} 
+                    publishedDate={moment(formatedDate).format('DD/MM/YYYY')} 
+                    title={item?.title} 
+                    content={item?.content}
+                    />
+                )
+            })
+         }
 
     
     </div>
