@@ -17,7 +17,7 @@ const useBlogs = () => {
 
       async function getBlogs(){
           try {
-            setLoading(false)
+            setLoading(true)
             const res =  await axios.get(`${BASE_URL}/api/v1/blog/blogs`,{
                 headers:{
                     Authorization: localStorage.getItem('token')
