@@ -34,6 +34,17 @@ blogRouter.use('/*', async(c,next)=>{
 
 })
 
+blogRouter.get('/me',async(c)=>{
+    try {
+       const userId = c.get('userId')
+       return c.json(userId)  
+    } catch (error) {
+        c.status(500)
+        return c.json({error:'Internal Server Error'})
+    }
+})
+
+
 blogRouter.post('/create',async(c)=>{
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL
@@ -65,6 +76,7 @@ blogRouter.post('/create',async(c)=>{
      
      return c.json({message:'Blog created Successfully'})
     } catch (error) {
+        console.log(error)
         c.status(500)
         return c.json({error:'Internal Server Error'})
     }

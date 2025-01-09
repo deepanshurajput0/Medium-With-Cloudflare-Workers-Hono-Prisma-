@@ -5,6 +5,8 @@ import Signin from './pages/Signin'
 import  { Toaster } from 'react-hot-toast';
 import Blog from './pages/Blog'
 import Blogs from './pages/Blogs';
+import Create from './pages/Create';
+
 function App() {
 
   return (
@@ -14,7 +16,8 @@ function App() {
       <Route path='/signup' element={<Signup/>}  />
       <Route path='/signin' element={<Signin/>}  />
       <Route path='/blog/:id' element={<Blog/>}  />
-      <Route path='/blogs' element={<Blogs/>}  />
+      <Route path='/' element={<Blogs/>}  />
+      <Route path='/create' element={<Create/>}  />
     </Routes>
    </Router>
    <Toaster />

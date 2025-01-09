@@ -7,7 +7,6 @@ const Blog = () => {
   if (loading) {
     return <div>Loading....</div>;
   }
-  console.log(blog);
   return (
     <div>
       <SingleBlog

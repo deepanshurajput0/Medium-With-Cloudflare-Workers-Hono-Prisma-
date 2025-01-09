@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import { BASE_URL } from "../config"
 const useBlogs = () => {
-    interface BlogsType{
+     interface BlogsType{
         id:number,
         createdAt:string,
         title:string,
