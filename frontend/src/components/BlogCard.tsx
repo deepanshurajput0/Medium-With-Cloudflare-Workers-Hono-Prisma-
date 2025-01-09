@@ -1,14 +1,17 @@
 import { Link } from "react-router-dom"
-
+import { BsThreeDotsVertical } from "react-icons/bs";
+import useGetUserId from "../hooks/useGetUserId";
 export interface Blogtype {
     author:string,
     publishedDate:string,
     title:string,
+    authorId:number,
     content:string,
     id?:number
 }
 
-const BlogCard = ({author,publishedDate,title,content,id}:Blogtype) => {
+const BlogCard = ({author,publishedDate,title,content,id,authorId}:Blogtype) => {
+    const { userId } = useGetUserId()
   return (
    <Link to={`/blog/${id}`} >
     <div className=" w-96 lg:w-[35rem] border-b-2 pb-4 cursor-pointer">
@@ -21,6 +24,11 @@ const BlogCard = ({author,publishedDate,title,content,id}:Blogtype) => {
             </div>
           <div className=" text-gray-600 pl-2">
           {publishedDate}
+          </div>
+          <div>
+              {
+                authorId === userId ? <BsThreeDotsVertical /> : null
+              }
           </div>
         </div>
         <div className=" font-bold text-[20px] pt-1">

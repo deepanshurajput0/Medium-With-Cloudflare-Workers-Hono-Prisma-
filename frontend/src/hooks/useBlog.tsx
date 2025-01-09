@@ -7,6 +7,7 @@ const useBlog = ({id}:{id:string | undefined}) => {
         createdAt:string,
         title:string,
         content:string,
+        authorId:number,
         published:boolean,
         author:{
          name:string

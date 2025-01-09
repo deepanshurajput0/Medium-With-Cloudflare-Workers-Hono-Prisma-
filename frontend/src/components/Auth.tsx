@@ -30,7 +30,7 @@ const Auth = () => {
         if(response.data){
             toast.success(response.data.message)
         }
-        navigate('/blog')
+        navigate('/')
         
       } catch (error) {
         setLoading(false)
