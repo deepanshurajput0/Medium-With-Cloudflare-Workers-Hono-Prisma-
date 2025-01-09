@@ -13,7 +13,7 @@ export interface Blogtype {
 const BlogCard = ({author,publishedDate,title,content,id,authorId}:Blogtype) => {
     const { userId } = useGetUserId()
   return (
-   <Link to={`/blog/${id}`} >
+   
     <div className=" w-96 lg:w-[35rem] border-b-2 pb-4 cursor-pointer">
         <div className=" flex items-center space-x-1">
         <div >
@@ -27,23 +27,35 @@ const BlogCard = ({author,publishedDate,title,content,id,authorId}:Blogtype) => 
           </div>
           <div>
               {
-                authorId === userId ? <BsThreeDotsVertical /> : null
+                authorId === userId ? 
+                <details className="dropdown">
+                <summary className="btn bg-white border-none m-1">
+                    <BsThreeDotsVertical/>
+                </summary>
+                <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                  <li><a>Item 1</a></li>
+                  <li><a>Item 2</a></li>
+                </ul>
+              </details>  
+                : null
               }
           </div>
+    
         </div>
+        <Link to={`/blog/${id}`} >
         <div className=" font-bold text-[20px] pt-1">
             {title}
         </div>
         <div className=" font-serif text-gray-600">
             {content.substring(0,150)}...
         </div>
+        </Link>
     </div>
-   </Link>
   )
 }
 
 
-const Avatar =({name}:string)=>{
+const Avatar =({name}:{name:string})=>{
     return(      
 
 <div className="relative inline-flex items-center justify-center w-8 h-8 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
