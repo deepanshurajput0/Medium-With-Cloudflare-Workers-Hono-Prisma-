@@ -98,27 +98,25 @@ blogRouter.get('/get/:id',async(c)=>{
 })
 
 
-blogRouter.put('/update/:id',async(c)=>{
+blogRouter.put('/update',async(c)=>{
     
+   
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate())
+
     const authorId = c.get('userId')
     if(!authorId){
         return c.json({
             error:'Unauthorized User'
         })
     }
-    const prisma = new PrismaClient({
-        datasourceUrl: c.env.DATABASE_URL
-    }).$extends(withAccelerate())
     try {
-        const blogId = c.req.param('id')
         const body = await c.req.json()
         const Validation =  updateBlogInput.safeParse(body)
         if(!Validation.success){
            c.status(400)
-           let errormsg = null
-           Validation.error.errors.map((item)=>(
-                 errormsg = item.message
-           ))
+           let errormsg = Validation.error.errors.map(item => item.message);
            return c.json({
                error:'Invalid Input',
                message:errormsg
@@ -131,7 +129,7 @@ blogRouter.put('/update/:id',async(c)=>{
 
             },
             where:{
-                id:Number(blogId),
+                id:Number(body.id),
                 authorId:Number(authorId)
             }
         })
@@ -140,6 +138,7 @@ blogRouter.put('/update/:id',async(c)=>{
          return c.json({message:'Blog Updated Successfully'})
 
     } catch (error) {
+        console.log(error)
         c.status(500)
         return c.json({error:'Internal Server Error'})
     }
