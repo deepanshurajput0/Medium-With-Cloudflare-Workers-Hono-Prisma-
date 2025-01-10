@@ -5,7 +5,6 @@ import useBlogs from "../hooks/useBlogs"
 import moment from 'moment'
 const Blogs = () => {
     const { loading, blogs } = useBlogs()
-    console.log(blogs)
     const skeletons = [1,2,3,4,5]
     if(loading){
         return(

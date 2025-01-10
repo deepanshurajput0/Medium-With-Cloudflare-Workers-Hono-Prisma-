@@ -33,8 +33,8 @@ const BlogCard = ({author,publishedDate,title,content,id,authorId}:Blogtype) => 
                     <BsThreeDotsVertical/>
                 </summary>
                 <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-                  <li><a>Item 1</a></li>
-                  <li><a>Item 2</a></li>
+                  <li><Link to={`/update/${id}`} > Update </Link></li>
+                  <li><a> Delete </a></li>
                 </ul>
               </details>  
                 : null
