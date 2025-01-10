@@ -49,7 +49,7 @@ const Blogs = () => {
     
      <div className=" flex flex-col items-center space-y-5 justify-center mt-10 ">
          {
-            blogs.map((item)=>{
+            blogs?.map((item)=>{
                 const formatedDate = item?.createdAt
 
                 return(
