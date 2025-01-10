@@ -1,5 +1,6 @@
 import toast from "react-hot-toast"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { CiCirclePlus } from "react-icons/ci";
 const Navbar = () => {
   const navigate = useNavigate()
   function Logout(){
@@ -10,10 +11,19 @@ const Navbar = () => {
   return (
     <div className=" flex justify-between border-b-2 p-3">
          <div>
-            <h1 className=" text-[18px] font-semibold"> Medium</h1>
+            <h1 className=" text-[18px] font-semibold"> 
+              <Link to={'/'} >Medium</Link>
+            </h1>
          </div>
 
+      
+
+         <div className=" flex items-center space-x-6">
          <div>
+          <Link to={'/create'} >
+          <CiCirclePlus size={30}/>
+          </Link>
+         </div>
          <details className="dropdown">
                 <summary className="btn bg-white border-none m-1">
                 <div className="relative inline-flex items-center justify-center w-8 h-8 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
