@@ -35,7 +35,7 @@ const useBlogs = () => {
          getBlogs()
        },[])
     return {
-        loading, blogs
+        loading, blogs, getBlogs
     }
 }
 

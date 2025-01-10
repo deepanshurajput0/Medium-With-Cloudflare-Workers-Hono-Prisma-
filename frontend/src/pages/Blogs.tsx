@@ -1,11 +1,16 @@
+import { useEffect, useState } from "react"
 import BlogCard from "../components/BlogCard"
 import BlogSkeleton from "../components/BlogSkeleton"
 import Navbar from "../components/Navbar"
 import useBlogs from "../hooks/useBlogs"
 import moment from 'moment'
+import axios from "axios"
+import { BASE_URL } from "../config"
+import toast from "react-hot-toast"
 const Blogs = () => {
-    const { loading, blogs } = useBlogs()
+    const { loading, blogs, getBlogs } = useBlogs()
     const skeletons = [1,2,3,4,5]
+
     if(loading){
         return(
            <div>
@@ -22,6 +27,22 @@ const Blogs = () => {
            </div>
         )
     }
+
+   
+     async  function deleteBlog(id:number | undefined){
+        try {
+            const res = await axios.delete(`${BASE_URL}/api/v1/blog/delete/${id}`,{
+                headers:{
+                    Authorization: localStorage.getItem('token')
+                }
+            })
+            toast.success(res.data.message)
+            blogs.filter(blog=>blog.id !== id)
+            getBlogs()
+        } catch (error) {
+            console.log(error)
+        }
+     }
   return (
    <div>
     <Navbar/>
@@ -39,6 +60,7 @@ const Blogs = () => {
                     title={item?.title} 
                     content={item?.content}
                     authorId={item?.authorId}
+                    deleteBlog={deleteBlog}
                     />
                 )
             })

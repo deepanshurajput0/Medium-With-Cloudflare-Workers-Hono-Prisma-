@@ -1,17 +1,20 @@
 import { Link } from "react-router-dom"
 import { BsThreeDotsVertical } from "react-icons/bs";
 import useGetUserId from "../hooks/useGetUserId";
+
 export interface Blogtype {
     author:string,
     publishedDate:string,
     title:string,
     authorId:number,
     content:string,
-    id?:number
+    id?:number,
+    deleteBlog:()=>void
 }
 
-const BlogCard = ({author,publishedDate,title,content,id,authorId}:Blogtype) => {
+const BlogCard = ({author,publishedDate,title,content,id,authorId,deleteBlog}:Blogtype) => {
     const { userId } = useGetUserId()
+   
   return (
    
     <div className=" w-96 lg:w-[35rem] border-b-2 pb-4 cursor-pointer">
@@ -34,7 +37,7 @@ const BlogCard = ({author,publishedDate,title,content,id,authorId}:Blogtype) => 
                 </summary>
                 <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
                   <li><Link to={`/update/${id}`} > Update </Link></li>
-                  <li><a> Delete </a></li>
+                  <li><span onClick={()=>deleteBlog(id)} > Delete </span></li>
                 </ul>
               </details>  
                 : null
