@@ -3,7 +3,7 @@ import moment from "moment"
 import Comment from "./Comment"
 
 
-const SingleBlog = ({author,publishedDate,title,content}:Blogtype) => {
+const SingleBlog = ({author,publishedDate,title,content,id}:Blogtype) => {
     const formatedDate = publishedDate
   return (
    <div>
@@ -35,7 +35,7 @@ const SingleBlog = ({author,publishedDate,title,content}:Blogtype) => {
     </div>
        </div>
     </div>
-    <Comment />
+    <Comment id={String(id)} />
    </div>
   )
 }

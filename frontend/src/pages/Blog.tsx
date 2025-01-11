@@ -10,10 +10,12 @@ const Blog = () => {
   return (
     <div>
       <SingleBlog
+        id={blog?.id}
         title={blog?.title ?? "Untitled"}
         content={blog?.content ?? "No content available"}
         publishedDate={blog?.createdAt ?? "Unknown date"}
         author={blog?.author?.name ?? "Anonymous"}
+        authorId={blog?.authorId ?? undefined}
       />
     </div>
   );
