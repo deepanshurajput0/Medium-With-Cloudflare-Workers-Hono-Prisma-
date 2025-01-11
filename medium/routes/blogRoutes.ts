@@ -211,3 +211,38 @@ blogRouter.get('/blogs',async(c)=>{
         return c.json({error:'Internal Server Error'})
     }
 })
+
+
+blogRouter.post('/comment/:id',async(c)=>{
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate())
+    try {
+        const postId = c.req.param('id')
+        const { comment } = await c.req.json()
+        const userId = c.get('userId')
+        if(!postId){
+            c.status(401)
+            return c.json({error:'Please Provide postId'})
+        }
+
+      const myComment = await prisma.comment.create({
+           data:{
+            comment,
+            postId: Number(postId),
+            userId: Number(userId)
+           }
+        })
+   
+      return c.json({
+        message:'Comment created successfully',
+        myComment
+      })
+
+    } catch (error) {
+        c.status(500)
+        return c.json({
+            message:'Internal Server error'
+        })
+    }
+}) 
