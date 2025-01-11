@@ -246,3 +246,23 @@ blogRouter.post('/comment/:id',async(c)=>{
         })
     }
 }) 
+
+blogRouter.get('/comments/:id',async(c)=>{
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate())
+
+    try {
+        const postId = c.req.param('id')
+        const comments = await prisma.comment.findMany({
+            where:{
+               postId:Number(postId)
+            }
+         })
+        return c.json(comments)
+    } catch (error) {
+        console.log(error)
+        c.status(500)
+        return c.json({error:'Internal Server Error'})
+    }
+})
