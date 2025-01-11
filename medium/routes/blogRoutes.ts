@@ -225,7 +225,10 @@ blogRouter.post('/comment/:id',async(c)=>{
             c.status(401)
             return c.json({error:'Please Provide postId'})
         }
-
+        if(!comment){
+            c.status(400)
+            return c.json({error:'comment is required'})
+        }
       const myComment = await prisma.comment.create({
            data:{
             comment,
@@ -254,6 +257,10 @@ blogRouter.get('/comments/:id',async(c)=>{
 
     try {
         const postId = c.req.param('id')
+        if(!postId){
+            c.status(401)
+            return c.json({error:'Please Provide postId'})
+        }
         const comments = await prisma.comment.findMany({
             where:{
                postId:Number(postId)

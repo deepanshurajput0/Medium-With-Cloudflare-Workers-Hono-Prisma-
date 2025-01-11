@@ -1,11 +1,13 @@
 import { Blogtype } from "./BlogCard"
 import moment from "moment"
-// import { BsThreeDotsVertical } from "react-icons/bs";
+import Comment from "./Comment"
+
 
 const SingleBlog = ({author,publishedDate,title,content}:Blogtype) => {
     const formatedDate = publishedDate
   return (
-    <div className=" flex justify-evenly items-center" >
+   <div>
+     <div className=" flex justify-evenly items-center" >
        <div className=" mt-10 p-3">
        <div>
         <h1 className=" text-3xl  font-bold ">{title}</h1>
@@ -33,6 +35,8 @@ const SingleBlog = ({author,publishedDate,title,content}:Blogtype) => {
     </div>
        </div>
     </div>
+    <Comment />
+   </div>
   )
 }
 
