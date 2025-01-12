@@ -243,10 +243,12 @@ blogRouter.post('/comment/:id',async(c)=>{
       })
 
     } catch (error) {
+        console.log(error)
         c.status(500)
         return c.json({
             message:'Internal Server error'
         })
+       
     }
 }) 
 
@@ -264,6 +266,13 @@ blogRouter.get('/comments/:id',async(c)=>{
         const comments = await prisma.comment.findMany({
             where:{
                postId:Number(postId)
+            },
+            include:{
+                user:{
+                    select:{
+                        name:true
+                    }
+                }
             }
          })
         return c.json(comments)
