@@ -282,3 +282,54 @@ blogRouter.get('/comments/:id',async(c)=>{
         return c.json({error:'Internal Server Error'})
     }
 })
+
+
+blogRouter.post('/like/:id',async(c)=>{
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate())
+    try {
+        const postId = Number(c.req.param('id'));
+        const userId = Number(c.get('userId'));
+       if (!postId || isNaN(postId)) {
+        c.status(400);
+        return c.json({ error: 'Invalid or missing postId' });
+    }
+
+    if (!userId || isNaN(userId)) {
+        c.status(400);
+        return c.json({ error: 'Invalid or missing userId' });
+    }
+
+      const existingLike = await prisma.likes.findFirst({
+        where:{
+            postId,
+            userId
+        }
+      })
+       
+      if (existingLike) {
+        c.status(400);
+        return c.json({ error: 'Post is already liked by this user' });
+    }
+      const Liked =  await prisma.likes.create({
+         data:{
+            postId,
+            userId,
+         }
+       })
+       if(Liked){
+        c.status(200)
+        return c.json({
+            message:'Post Liked'
+        })
+       }
+    } catch (error) {
+        console.log(error)
+        c.status(500)
+        return c.json({error:'Internal Server Error'})
+    }
+})
+
+
+
