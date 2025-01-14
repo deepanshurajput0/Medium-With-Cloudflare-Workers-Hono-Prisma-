@@ -358,3 +358,29 @@ blogRouter.delete('/unlike/:id',async(c)=>{
 })
 
 
+
+blogRouter.get('/likes/:id',async(c)=>{
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate())
+    try {
+        const postId = Number(c.req.param('id'))
+        if(!postId){
+            c.status(400)
+            return c.json({error:'PostId is required'})
+        }
+        const likes = await prisma.likes.count({
+            where:{
+                postId
+            }
+        })
+        if(!likes){
+            c.status(200)
+            return c.json({error:'No Likes found'})
+        }
+    } catch (error) {
+        console.log(error)
+        c.status(500)
+        return c.json({error:'Internal Server Error'})      
+    }
+})
