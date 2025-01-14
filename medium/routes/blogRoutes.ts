@@ -291,14 +291,9 @@ blogRouter.post('/like/:id',async(c)=>{
     try {
         const postId = Number(c.req.param('id'));
         const userId = Number(c.get('userId'));
-       if (!postId || isNaN(postId)) {
+       if (!postId || !userId) {
         c.status(400);
-        return c.json({ error: 'Invalid or missing postId' });
-    }
-
-    if (!userId || isNaN(userId)) {
-        c.status(400);
-        return c.json({ error: 'Invalid or missing userId' });
+        return c.json({ error: 'Invalid postId or userId' });
     }
 
       const existingLike = await prisma.likes.findFirst({
@@ -330,6 +325,36 @@ blogRouter.post('/like/:id',async(c)=>{
         return c.json({error:'Internal Server Error'})
     }
 })
+blogRouter.delete('/unlike/:id',async(c)=>{
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate())
+    try {
+        const postId = Number(c.req.param('id'));
+        const userId = Number(c.get('userId'));
+       if (!postId || isNaN(postId)) {
+        c.status(400);
+        return c.json({ error: 'Invalid or missing postId' });
+    }
 
+    if (!userId || isNaN(userId)) {
+        c.status(400);
+        return c.json({ error: 'Invalid or missing userId' });
+    }
+
+    await prisma.likes.deleteMany({
+        where:{
+          userId,
+          postId
+        }
+     })
+      c.status(200);
+      return c.json({ message: 'Post unliked successfully' });
+    } catch (error) {
+        console.log(error)
+        c.status(500)
+        return c.json({error:'Internal Server Error'})
+    }
+})
 
 
