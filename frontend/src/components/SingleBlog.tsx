@@ -1,11 +1,10 @@
 import { Blogtype } from "./BlogCard"
 import moment from "moment"
 import CommentsSection from "./CommentsSection"
-import useGetUserId from "../hooks/useGetUserId"
+
 
 const SingleBlog = ({author,publishedDate,title,content,id}:Blogtype) => {
     const formatedDate = publishedDate
-    const { userId } = useGetUserId()
   return (
    <div>
      <div className=" flex justify-evenly items-center" >
@@ -37,7 +36,7 @@ const SingleBlog = ({author,publishedDate,title,content,id}:Blogtype) => {
        </div>
        
     </div>
-    <CommentsSection postId={String(id)} userId={Number(userId)} />
+    <CommentsSection postId={String(id)} />
    </div>
   )
 }

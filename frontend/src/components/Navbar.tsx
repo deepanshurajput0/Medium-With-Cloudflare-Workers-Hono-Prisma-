@@ -9,7 +9,7 @@ const Navbar = () => {
      navigate('/signin')
   }
   return (
-    <div className=" flex justify-between border-b-2 p-3">
+    <div className=" h-16 flex justify-between border-b-2 p-3">
          <div>
             <h1 className=" text-[18px] font-semibold"> 
               <Link to={'/'} >Medium</Link>

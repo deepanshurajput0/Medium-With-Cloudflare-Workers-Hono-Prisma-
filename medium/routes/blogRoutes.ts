@@ -234,6 +234,9 @@ blogRouter.post('/comment/:id',async(c)=>{
             comment,
             postId: Number(postId),
             userId: Number(userId)
+           },
+           include:{
+            user:true
            }
         })
    
@@ -332,16 +335,10 @@ blogRouter.delete('/unlike/:id',async(c)=>{
     try {
         const postId = Number(c.req.param('id'));
         const userId = Number(c.get('userId'));
-       if (!postId || isNaN(postId)) {
+       if (!postId || !userId) {
         c.status(400);
-        return c.json({ error: 'Invalid or missing postId' });
+        return c.json({ error: 'Invalid or missing postId & userId' });
     }
-
-    if (!userId || isNaN(userId)) {
-        c.status(400);
-        return c.json({ error: 'Invalid or missing userId' });
-    }
-
     await prisma.likes.deleteMany({
         where:{
           userId,
@@ -369,7 +366,7 @@ blogRouter.get('/likes/:id',async(c)=>{
             c.status(400)
             return c.json({error:'PostId is required'})
         }
-        const likes = await prisma.likes.count({
+        const likes = await prisma.likes.findMany({
             where:{
                 postId
             }
@@ -378,6 +375,7 @@ blogRouter.get('/likes/:id',async(c)=>{
             c.status(200)
             return c.json({error:'No Likes found'})
         }
+        return c.json(likes)
     } catch (error) {
         console.log(error)
         c.status(500)

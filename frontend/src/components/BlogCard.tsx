@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import { BsThreeDotsVertical } from "react-icons/bs";
 import useGetUserId from "../hooks/useGetUserId";
+import LikeSection from "./LikeSection";
 
 export interface Blogtype {
     author:string,
@@ -53,6 +54,9 @@ const BlogCard = ({author,publishedDate,title,content,id,authorId,deleteBlog}:Bl
             {content.substring(0,150)}...
         </div>
         </Link>
+        <div>
+          <LikeSection postId={id} />
+        </div>
     </div>
   )
 }
