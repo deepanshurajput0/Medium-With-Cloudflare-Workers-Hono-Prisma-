@@ -4,12 +4,19 @@ import { BASE_URL } from "../config";
 import { useEffect, useState } from "react";
 import useGetUserId from "../hooks/useGetUserId";
 import toast from "react-hot-toast";
+interface Like {
+    id:number,
+    userId:number,
+    postId:number
+}
 const LikeSection = ({postId}:{postId:string}) => {
     const [liked, setLiked] = useState<boolean>(false)
-    const [likes, setLikes] = useState([])
+    const [likes, setLikes] = useState<Like[]>([])
+    console.log(likes)
     const { userId } = useGetUserId()
      async function LikePost(){
         setLiked(true)
+        setLikes((prev:Like)=>[...prev, {userId}])
         try {
             const res = await axios.post(`${BASE_URL}/api/v1/blog/like/${postId}`,{
                 postId, userId
@@ -19,21 +26,42 @@ const LikeSection = ({postId}:{postId:string}) => {
                     Authorization: localStorage.getItem('token')
                 }
             })
-             if(res.data.message){
-               const newLike = res.data
-               setLikes([
-                ...likes,
-                newLike
-               ])
+             if(!res.data.message){
+                throw new Error('Failed to like the Post')
              }
 
         } catch (error) {
-            console.log(error)
+            setLiked(false);
+      setLikes((prev) => prev.filter((like) => like.userId !== userId));
             if(axios.isAxiosError(error) && error.response){
                 toast.error(error.response.data.error)
             }
         }
      }
+
+     async function Unlike(){
+        setLiked(false)
+        setLikes((prev) => prev.filter((like) => like.userId !== userId))
+        try {
+            const res = await axios.delete(`${BASE_URL}/api/v1/blog/unlike/${postId}`,{
+                headers:{
+                    Authorization: localStorage.getItem('token')
+                }
+            })
+            if (!res.data.message) {
+                throw new Error("Failed to unlike the post"); // Revert on failure
+              }
+
+        } catch (error) {
+            console.log(error)
+            setLiked(true);
+      setLikes((prev) => [...prev, { userId }]);
+            if(axios.isAxiosError(error) && error.response){
+                toast.error(error.response.data.error)
+            }
+        }
+     }
+
 
      async function getLikes(){
         try {
@@ -45,9 +73,7 @@ const LikeSection = ({postId}:{postId:string}) => {
              if(res.data){
                setLikes(res.data)
                const myLike = res.data.some((like) => like.userId === userId);
-               if(myLike){
-                setLiked(true)
-               }
+                setLiked(myLike)
              }
 
         } catch (error) {
@@ -58,32 +84,12 @@ const LikeSection = ({postId}:{postId:string}) => {
         }
      }
 
-     async function Unlike(){
-        try {
-            const res = await axios.delete(`${BASE_URL}/api/v1/blog/unlike/${postId}`,{
-                headers:{
-                    Authorization: localStorage.getItem('token')
-                }
-            })
-             if(res.data.message){
-               setLiked(false)
-               const newLikes = likes.filter((item)=>item.userId !== userId )
-               if(newLikes){
-                setLikes(newLikes)
-               }
-               
-             }
-
-        } catch (error) {
-            console.log(error)
-            if(axios.isAxiosError(error) && error.response){
-                toast.error(error.response.data.error)
-            }
-        }
-     }
      useEffect(()=>{
        getLikes()
-     },[liked,userId])
+     },[userId,postId])
+
+
+
 
 
   return (
