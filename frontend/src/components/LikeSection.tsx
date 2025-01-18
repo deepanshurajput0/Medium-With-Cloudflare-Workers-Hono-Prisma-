@@ -9,6 +9,7 @@ const LikeSection = ({postId}:{postId:string}) => {
     const [likes, setLikes] = useState([])
     const { userId } = useGetUserId()
      async function LikePost(){
+        setLiked(true)
         try {
             const res = await axios.post(`${BASE_URL}/api/v1/blog/like/${postId}`,{
                 postId, userId
@@ -19,7 +20,6 @@ const LikeSection = ({postId}:{postId:string}) => {
                 }
             })
              if(res.data.message){
-               setLiked(true)
                const newLike = res.data
                setLikes([
                 ...likes,
